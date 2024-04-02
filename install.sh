@@ -39,13 +39,7 @@ apt-get update && apt-get dist-upgrade -y
 apt-get install -y sudo zsh git zip unzip
 
 # Creating user
-mkdir -p $HOME_DIR/.config \
-	 $HOME_DIR/.local/bin \
-	 $HOME_DIR/.local/share \
-	 $HOME_DIR/.local/state \
-	 $HOME_DIR/.cache \
-	 $HOME_DIR/.ssh \
-	 $HOME_DIR/downloads
+mkdir "$HOME_DIR"
 
 useradd --home-dir $HOME_DIR --groups sudo --shell /usr/bin/zsh $USERNAME
 echo "$USERNAME:$PASSWORD" | chpasswd 
