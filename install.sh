@@ -33,11 +33,13 @@ fi
 
 HOME_DIR="/home/$USERNAME"
 
-create_user() {
-# Update system and Install base packages
+install_packages() {
 apt-get update && apt-get dist-upgrade -y
-apt-get install -y sudo zsh git zip unzip
+apt-get install -y sudo zsh git zip unzip neovim build-essential wget curl \
+	xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 python3-pip python3-venv 
+}
 
+create_user() {
 # Creating user
 mkdir "$HOME_DIR"
 
@@ -58,11 +60,13 @@ sudo -u $USERNAME $HOME_DIR/dotfiles/install -c user.conf.yaml
 $HOMEDIR/dotfiles/install -c admin.conf.yaml
 }
 
+install_qtile() {
+
+}
+
+install_packages
 create_user
 install_dotfiles
+install_qtile
 
-# Qtile dependecies
-apt-get install xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 python3-pip python3-venv
 
-#apt-get install -y zsh neovim tmux gtypist wget xorg-x\
-                   #bat ffmpeg curl build-essential xorg
