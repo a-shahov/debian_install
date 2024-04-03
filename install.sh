@@ -3,7 +3,8 @@
 # Script for installing desktop environment for python/C/C++
 # development on bare Debian 12 bookworm
 
-URL_DOTFILES='https://github.com/a-shahov/dotfiles.git'
+URL_DOTFILES="https://github.com/a-shahov/dotfiles.git"
+URL_QTILE="https://github.com/qtile/qtile.git"
 
 display_usage() {
     echo 'Usage : install.sh -u <username> -p <password>'
@@ -34,34 +35,38 @@ fi
 HOME_DIR="/home/$USERNAME"
 
 install_packages() {
-apt-get update && apt-get dist-upgrade -y
-apt-get install -y sudo zsh git zip unzip neovim build-essential wget curl \
-	xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 python3-pip python3-venv 
+    apt-get update && apt-get dist-upgrade -y
+    apt-get install -y sudo zsh git zip unzip neovim build-essential wget curl \
+	    xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 python3-pip python3-venv 
 }
 
 create_user() {
-# Creating user
-mkdir "$HOME_DIR"
+    # Creating user
+    mkdir "$HOME_DIR"
 
-useradd --home-dir $HOME_DIR --groups sudo --shell /usr/bin/zsh $USERNAME
-echo "$USERNAME:$PASSWORD" | chpasswd 
-chown -R $USERNAME:$USERNAME $HOME_DIR
+    useradd --home-dir $HOME_DIR --groups sudo --shell /usr/bin/zsh $USERNAME
+    echo "$USERNAME:$PASSWORD" | chpasswd 
+    chown -R $USERNAME:$USERNAME $HOME_DIR
 
-# generate ssh keys
-sudo -u $USERNAME ssh-keygen -t ed25519 -N "" -f $HOME_DIR/.ssh/id_ed25519 <<< $'\ny'
+    # generate ssh keys
+    sudo -u $USERNAME ssh-keygen -t ed25519 -N "" -f $HOME_DIR/.ssh/id_ed25519 <<< $'\ny'
 }
 
 install_dotfiles() {
-# Install dotfiles
-git clone $URL_DOTFILES
-mv $(pwd)/dotfiles $HOME_DIR/
-chown -R $USERNAME:$USERNAME $HOME_DIR/dotfiles
-sudo -u $USERNAME $HOME_DIR/dotfiles/install -c user.conf.yaml
-$HOMEDIR/dotfiles/install -c admin.conf.yaml
+    # Install dotfiles
+    git clone $URL_DOTFILES
+    mv $(pwd)/dotfiles "$HOME_DIR/"
+    chown -R $USERNAME:$USERNAME $HOME_DIR/dotfiles
+    sudo -u $USERNAME $HOME_DIR/dotfiles/install -c user.conf.yaml
+    $HOME_DIR/dotfiles/install -c admin.conf.yaml
 }
 
 install_qtile() {
-
+    git clone $URL_QTILE
+    mv $(pwd)/dotfiles "$HOME_DIR/.local"
+    chown -R $USERNAME:$USERNAME "$HOME_DIR/.local/"
+    cd "$HOME_DIR/.local/qtile"
+    sudo -u $USERNAME python3 -m vevn .venv    
 }
 
 install_packages
