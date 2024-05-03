@@ -35,10 +35,11 @@ HOME_DIR="/home/$USERNAME"
 
 install_packages() {
     apt-get update && apt-get dist-upgrade -y
+    apt-get install dbus man
     apt-get build-dep -y python3
-    apt-get install -y sudo zsh git zip unzip neovim build-essential wget curl \
-	    xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 \
-	    pkg-config gdb lcov libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
+    apt-get install -y sudo zsh git zip unzip neovim build-essential wget curl pipewire-audio pavucontrol-qt \
+	    xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 \ # qtile deps
+	    pkg-config gdb lcov libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \ # python deps
 	    libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev lzma lzma-dev tk-dev uuid-dev zlib1g-dev
 }
 
@@ -66,11 +67,66 @@ install_dotfiles() {
     rm ~/.gitconfig
 }
 
-install_packages
-create_user
-install_dotfiles
+install_python() {
+    local PYTHON_DIR="python3.12"
+    local PYTHON_VERSION="Python-3.12.2"
+    local URL_PYTHON="https://www.python.org/ftp/python/3.12.2/$PYTHON_VERSION.tar.xz"
 
-cp install_as_user.sh $HOME_DIR/
-chown $USERNAME:$USERNAME $HOME_DIR/install_as_user.sh
-sudo -u $USERNAME $HOME_DIR/install_as_user.sh
+    cd $HOME
+    wget $URL_PYTHON
+    tar -xavf $PYTHON_VERSION.tar.xz -C $HOME
+    rm $PYTHON_VERSION.tar.xz
+    cd $PYTHON_VERSION
+    ./configure --enable-optimizations --prefix=$HOME/.local/$PYTHON_DIR
+    make -j`nproc`
+    make test
+    make install
+    cd && rm -rf $PYTHON_VERSION
+    PATH=$HOME/.local/$PYTHON_DIR/bin:$PATH
+}
+ 
+install_qtile() {
+    local URL_QTILE="https://github.com/qtile/qtile.git"
+
+    cd $HOME/.local
+    git clone $URL_QTILE
+    cd qtile
+    python3 -m pip install -U pip
+    python3 -m venv .venv
+    source .venv/bin/activate
+    python3 -m pip install dbus-next psutil pyxdg pulsectl_asyncio
+    python3 -m pip install "."
+    cp .venv/bin/qtile $HOME/.local/bin
+    deactivate
+}
+
+install_kitty() {
+    local URL_KITTY="https://sw.kovidgoyal.net/kitty/installer.sh" 
+
+    curl -L URL_KITTY | sh /dev/stdin
+    ln -sf $HOME/.local/kitty.app/bin/kitty $HOME/.local/kitty.app/bin/kitten $HOME/.local/bin
+    cp $HOME/.local/kitty.app/share/applications/kitty.desktop $HOME/.local/share/applications/
+    cp $HOME/.local/kitty.app/share/applications/kitty-open.desktop $HOME/.local/share/applications/
+    sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+    sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+}
+
+date > log.txt
+echo "Installing new system..." | tee -a log.txt
+install_packages | tee -a log.txt
+create_user | tee -a log.txt
+install_dotfiles | tee -a log.txt
+
+DECL_PYTHON=`declare -f install_python`
+DECL_QTILE=`declare -f install_qtile`
+DECL_KITTY=`declare -f install_kitty`
+
+sudo -u $USERNAME /usr/bin/env bash -c "$DECL_PYTHON; install_python | tee -a log.txt"
+sudo -u $USERNAME /usr/bin/env bash -c "$DECL_QTILE; install_qtile | tee -a log.txt"
+sudo -u $USERNAME /usr/bin/env bash -c "$DECL_KITTY; install_kitty | tee -a log.txt"
+
+#cp install_as_user.sh $HOME_DIR/
+#chown $USERNAME:$USERNAME $HOME_DIR/install_as_user.sh
+#sudo -u $USERNAME $HOME_DIR/install_as_user.sh
+#rm $HOME_DIR/install_as_user.sh
 
