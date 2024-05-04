@@ -27,7 +27,22 @@ while [[ "$1" != "" ]]; do
     shift 1
 done
 
-if [[ "$PASSWORD" == "" ]] || [[ "$USERNAME" == "" ]] then
+if [[ -z "$PASSWORD" ]] then
+    for ((i=0; i<3; i++)); 
+    do
+        IFS= read -r -s -p 'password: ' pass1
+	echo
+        IFS= read -r -s -p 'repeat password: ' pass2
+	echo
+	if [[ $pass1 = $pass2 ]] then
+	    PASSWORD=$pass1
+	    break
+	fi
+	echo "passwords don't match"
+    done
+fi
+
+if [[ -z "$PASSWORD" ]] || [[ -z "$USERNAME" ]] then
     display_usage
 fi
 
@@ -35,11 +50,11 @@ HOME_DIR="/home/$USERNAME"
 
 install_packages() {
     apt-get update && apt-get dist-upgrade -y
-    apt-get install dbus man
+    apt-get install -y dbus man
     apt-get build-dep -y python3
     apt-get install -y sudo zsh git zip unzip neovim build-essential wget curl pipewire-audio pavucontrol-qt \
-	    xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 \ # qtile deps
-	    pkg-config gdb lcov libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \ # python deps
+	    xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 python3-venv python3-pip \
+	    pkg-config gdb lcov libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
 	    libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev lzma lzma-dev tk-dev uuid-dev zlib1g-dev
 }
 
@@ -103,7 +118,7 @@ install_qtile() {
 install_kitty() {
     local URL_KITTY="https://sw.kovidgoyal.net/kitty/installer.sh" 
 
-    curl -L URL_KITTY | sh /dev/stdin
+    curl -L $URL_KITTY | sh /dev/stdin
     ln -sf $HOME/.local/kitty.app/bin/kitty $HOME/.local/kitty.app/bin/kitten $HOME/.local/bin
     cp $HOME/.local/kitty.app/share/applications/kitty.desktop $HOME/.local/share/applications/
     cp $HOME/.local/kitty.app/share/applications/kitty-open.desktop $HOME/.local/share/applications/
@@ -111,19 +126,20 @@ install_kitty() {
     sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 }
 
-date > log.txt
-echo "Installing new system..." | tee -a log.txt
-install_packages | tee -a log.txt
-create_user | tee -a log.txt
-install_dotfiles | tee -a log.txt
+date > /tmp/log.txt
+chgrp $USERNAME /tmp/log.txt
+echo "Installing new system..." | tee -a /tmp/log.txt
+install_packages 2>&1 | tee -a /tmp/log.txt
+create_user 2>&1 | tee -a /tmp/log.txt
+install_dotfiles 2>&1 | tee -a /tmp/log.txt
 
 DECL_PYTHON=`declare -f install_python`
 DECL_QTILE=`declare -f install_qtile`
 DECL_KITTY=`declare -f install_kitty`
 
-sudo -u $USERNAME /usr/bin/env bash -c "$DECL_PYTHON; install_python | tee -a log.txt"
-sudo -u $USERNAME /usr/bin/env bash -c "$DECL_QTILE; install_qtile | tee -a log.txt"
-sudo -u $USERNAME /usr/bin/env bash -c "$DECL_KITTY; install_kitty | tee -a log.txt"
+sudo -u $USERNAME /usr/bin/env bash -c "$DECL_PYTHON; install_python 2>&1 | tee -a /tmp/log.txt"
+sudo -u $USERNAME /usr/bin/env bash -c "$DECL_QTILE; install_qtile 2>&1 | tee -a /tmp/log.txt"
+sudo -u $USERNAME /usr/bin/env bash -c "$DECL_KITTY; install_kitty 2>&1 | tee -a /tmp/log.txt"
 
 #cp install_as_user.sh $HOME_DIR/
 #chown $USERNAME:$USERNAME $HOME_DIR/install_as_user.sh
