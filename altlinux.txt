@@ -1,0 +1,4 @@
+/etc/hostname - our hostname
+apt-get update && apt-get dist-upgrade
+
+firmware-linux - for correct wifi working

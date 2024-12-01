@@ -49,13 +49,16 @@ fi
 HOME_DIR="/home/$USERNAME"
 
 install_packages() {
+    MAIN=( dbus man sudo zsh git zip unzip xorg \
+	    neovim build-essential wget curl pipewire-audio pavucontrol-qt )
+    QTILE=( libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 python3-venv python3-pip )
+    PYTHON=( pkg-config gdb lcov libbz2-dev libffi-dev libgdbm-dev \
+	    libgdbm-compat-dev liblzma-dev libncurses5-dev libreadline6-dev libsqlite3-dev \
+	    libssl-dev lzma lzma-dev tk-dev uuid-dev zlib1g-dev )
+
     apt-get update && apt-get dist-upgrade -y
-    apt-get install -y dbus man
     apt-get build-dep -y python3
-    apt-get install -y sudo zsh git zip unzip neovim build-essential wget curl pipewire-audio pavucontrol-qt \
-	    xorg libpangocairo-1.0-0 libxcb1 libcairo2 libgdk-pixbuf-2.0-0 python3-venv python3-pip \
-	    pkg-config gdb lcov libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
-	    libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev lzma lzma-dev tk-dev uuid-dev zlib1g-dev
+    apt-get install -y "${MAIN[@]}" "${QTILE[@]}" "${PYTHON[@]}"
 }
 
 create_user() {
@@ -133,16 +136,11 @@ install_packages 2>&1 | tee -a /tmp/log.txt
 create_user 2>&1 | tee -a /tmp/log.txt
 install_dotfiles 2>&1 | tee -a /tmp/log.txt
 
-DECL_PYTHON=`declare -f install_python`
-DECL_QTILE=`declare -f install_qtile`
-DECL_KITTY=`declare -f install_kitty`
+DECL_PYTHON=$(declare -f install_python)
+DECL_QTILE=$(declare -f install_qtile)
+DECL_KITTY=$(declare -f install_kitty)
 
 sudo -u $USERNAME /usr/bin/env bash -c "$DECL_PYTHON; install_python 2>&1 | tee -a /tmp/log.txt"
 sudo -u $USERNAME /usr/bin/env bash -c "$DECL_QTILE; install_qtile 2>&1 | tee -a /tmp/log.txt"
 sudo -u $USERNAME /usr/bin/env bash -c "$DECL_KITTY; install_kitty 2>&1 | tee -a /tmp/log.txt"
-
-#cp install_as_user.sh $HOME_DIR/
-#chown $USERNAME:$USERNAME $HOME_DIR/install_as_user.sh
-#sudo -u $USERNAME $HOME_DIR/install_as_user.sh
-#rm $HOME_DIR/install_as_user.sh
 
