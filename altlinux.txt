@@ -1,4 +1,83 @@
 /etc/hostname - our hostname
 apt-get update && apt-get dist-upgrade
 
-firmware-linux - for correct wifi working
+apt-get install firmware-linux  # for correct wifi working
+apt-get install wpa_supplicant systemd-timesyncd  # work with wifi
+
+## wifi ##
+
+/etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=/run/wpa_supplicant
+update_config=1
+
+wpa_supplicant -B -i interface -c /etc/wpa_supplicant/wpa_supplicant.conf
+wpa_cli
+>scan
+>scan_results
+>add_network
+>set_network 0 ssid "SSID"
+>set_ntework psk "passphrase"
+>enable_network 0
+>save_config
+dhcpcd interface
+
+##
+/etc/systemd/network/wifi.network
+[Match]
+Name=w*
+
+[Link]
+RequiredForOnline=routable
+
+[Network]
+DHCP=ipv4
+
+[DHCPv4]
+UseDNS=yes
+UseDomains=yes
+
+/etc/systemd/network/lan.network
+[Match]
+Name=e*
+
+[Link]
+RequiredForOnline=routable
+
+[Network]
+DHCP=ipv4
+
+[DHCPv4]
+UseDNS=yes
+UseDomains=yes
+
+
+/etc/wpa_supplicant/wpa_supplicant-interface.conf
+ctrl_interface=/run/wpa_supplicant
+ctrl_interface_group=wheel
+eapol_version=2
+fast_reauth=1
+
+wpa_passphrase "SSID" "pass" >> /etc/wpa_supplicant/wpa_supplicant-interface.conf
+
+# if we use several networks then we have to watch /etc/resolv.conf
+
+systemctl enable wpa_supplicant@interface.service
+systemctl start wpa_supplicant@interface.service
+
+in future need to add wpa_cli action script or integrate into qtile
+
+we need scripts for wpa_supplicant as systemd unit work with priority -> we dont need this because wpa_cli enough
+wpa_cli reconfigure
+wpa_cli select_network
+wpa_cli reconnect
+wpa_cli -a file # for notify-send
+
+####
+
+## systemd-resolved ##
+
+apt-get install systemd-resolved # dont need!
+systemctl enbale --now systemd-resolved
+ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
+####
