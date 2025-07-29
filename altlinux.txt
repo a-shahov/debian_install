@@ -1,8 +1,14 @@
 /etc/hostname - our hostname
 apt-get update && apt-get dist-upgrade
 
+apt-get install python3 # python3-tools
+
 apt-get install firmware-linux  # for correct wifi working
 apt-get install wpa_supplicant systemd-timesyncd  # work with wifi
+apt-get install rfkill
+
+rfkill unblock wifi bluetooth
+modprobe iwlwifi hidp
 
 ## wifi ##
 
@@ -81,3 +87,29 @@ systemctl enbale --now systemd-resolved
 ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
 ####
+
+## bluetooth ##
+
+apt-get install bluez bluez-tools
+
+hciconfig up hci0
+systemctl start bluetooth
+systemctl enable bluetooth
+bluetooth
+>power on
+>scan on
+>devices
+>pair MAC
+>trust MAC
+>connect MAC
+
+####
+
+## qtile + wayland ##
+
+https://www.altlinux.org/%D0%9A%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B_RPM
+https://www.altlinux.org/Sudo
+https://www.altlinux.org/Control
+
+apt-get install gcc zsh
+
