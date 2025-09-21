@@ -1,6 +1,8 @@
 /etc/hostname - our hostname
 apt-get update && apt-get dist-upgrade
-update-kernel (with drm-noveu)
+
+apt-get install update-kernel
+update-kernel -i (with drm-noveu)
 
 apt-get install python3 # python3-tools
 
@@ -83,7 +85,6 @@ wpa_cli -a file # for notify-send
 
 ## systemd-resolved ##
 
-apt-get install systemd-resolved # dont need!
 systemctl enbale --now systemd-resolved
 ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
@@ -113,10 +114,12 @@ https://www.altlinux.org/Sudo
 https://www.altlinux.org/Control
 https://www.altlinux.org/Udev
 
-apt-get install gcc zsh seatd libwlroots12 xorg-xwayland wayland
+apt-get install gcc zsh seatd libwlroots12 xorg-xwayland
+apt-get install git wget curl openssh-common qtile kitty
+apt-get install zip unzip
 systemctl start/enable seatd
 groupadd seat xgrp
-usermod -aG seat xgrp user video
+usermod -aG seat xgrp wheel video
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
 vi /etc/udev/rules.d/99-dri.rules
 KERNEL=="card*", SUBSYSTEM=="drm", GROUP="video", MODE="0660"
