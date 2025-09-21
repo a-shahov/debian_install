@@ -7,7 +7,6 @@
 6) apps on startup
 7) startup qtile
 8) login manager ly?
-9) volume in bar
 
 /etc/hostname - our hostname
 apt-get update && apt-get dist-upgrade
@@ -145,6 +144,6 @@ wl_input_rules = {
 }
 
 timedatectl set-timezone "Europe/Moscow"
-apt-get install chromium-gost pipewire wireplumber alsa-utils firmware-alsa-sof btop
+apt-get install chromium-gost pipewire wireplumber alsa-utils firmware-alsa-sof btop amixer
 systemctl --user enable --now pipewire{,-pulse}.socket wireplumber
 
