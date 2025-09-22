@@ -4,7 +4,7 @@
 3) обои рабочего стола с подсказками (qtile, kitty, wpa_cli, bluetoothctl, wpctl)
 4) zsh
 5) nvim
-6) apps on startup
+6) apps on startup + Match
 7) startup qtile
 8) login manager ly?
 9) https://habr.com/ru/articles/857600/
