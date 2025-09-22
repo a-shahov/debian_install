@@ -138,12 +138,6 @@ KERNEL=="card*", SUBSYSTEM=="drm", GROUP="video", MODE="0660"
 udevadm control --reload
 udevadm trigger
 
-from libqtile.backend.wayland import InputConfig
-wl_input_rules = {
-    "type:keyboard": InputConfig(
-        kb_layout="us,ru", kb_options="grp:caps_toggle",
-    ),
-}
 
 timedatectl set-timezone "Europe/Moscow"
 apt-get install chromium-gost pipewire wireplumber alsa-utils firmware-alsa-sof btop amixer
