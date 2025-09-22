@@ -10,6 +10,7 @@
 9) https://habr.com/ru/articles/857600/
 10) dbus notifier dunst
 11) "S-<bracketleft>" - prev_window + bring_to_front
+12) Battery + udev rules for /sys/class/power_supply/BAT0/charge_control_end_threshold https://www.altlinux.org/Udev
 
 
 /etc/hostname - our hostname
