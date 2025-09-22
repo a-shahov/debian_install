@@ -104,7 +104,7 @@ ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
 ## bluetooth ##
 
-apt-get install bluez bluez-tools
+apt-get install bluez bluez-tools blueman
 
 hciconfig up hci0
 systemctl start bluetooth
