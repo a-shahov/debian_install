@@ -8,6 +8,7 @@
 7) startup qtile
 8) login manager ly?
 9) https://habr.com/ru/articles/857600/
+10) dbus notifier
 
 
 /etc/hostname - our hostname
