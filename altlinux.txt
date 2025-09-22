@@ -8,7 +8,8 @@
 7) startup qtile
 8) login manager ly?
 9) https://habr.com/ru/articles/857600/
-10) dbus notifier
+10) dbus notifier dunst
+11) "S-<bracketleft>" - prev_window + bring_to_front
 
 
 /etc/hostname - our hostname
