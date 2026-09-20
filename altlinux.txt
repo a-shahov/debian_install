@@ -1,6 +1,6 @@
 # Заметки
 1) wireplumber настройки как переключать выходы
-2) кастомизация qtile bar
+2) кастомизация qtile bar (переставить виджеты)
 3) обои рабочего стола с подсказками (qtile, kitty, wpa_cli, bluetoothctl, wpctl)
 4) zsh
 5) nvim
