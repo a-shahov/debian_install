@@ -131,7 +131,7 @@ https://www.altlinux.org/Udev
 
 apt-get install gcc zsh seatd libwlroots12 xorg-xwayland
 apt-get install git wget curl openssh-common qtile kitty
-apt-get install zip unzip
+apt-get install zip unzip flatpak wl-clipboard
 systemctl start/enable seatd
 groupadd seat xgrp
 usermod -aG seat xgrp wheel video audio
@@ -162,4 +162,9 @@ andrey soft nproc 32768
 andrey hard nproc 32768
 root soft nproc 32768
 root hard nproc 32768
+
+
+# flatpak
+flatpak remote-add flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak update
 
