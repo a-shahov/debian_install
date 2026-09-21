@@ -132,6 +132,8 @@ https://www.altlinux.org/Udev
 apt-get install gcc zsh seatd libwlroots12 xorg-xwayland
 apt-get install git wget curl openssh-common qtile kitty
 apt-get install zip unzip flatpak wl-clipboard
+apt-get install sing-box
+apt-get install tlegram-desktop libqt6-wlshellintegration
 systemctl start/enable seatd
 groupadd seat xgrp
 usermod -aG seat xgrp wheel video audio
