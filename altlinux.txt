@@ -1,6 +1,6 @@
 # Заметки
 1) wireplumber настройки как переключать выходы
-2) кастомизация qtile bar (переставить виджеты)
+2) кастомизация qtile bar (переставить виджеты) LaunchBar
 3) обои рабочего стола с подсказками (qtile, kitty, wpa_cli, bluetoothctl, wpctl)
 4) zsh
 5) nvim
@@ -9,8 +9,8 @@
 8) login manager ly?
 9) https://habr.com/ru/articles/857600/
 10) dbus notifier dunst
-11) "S-<bracketleft>" - prev_window + bring_to_front
-12) Battery + udev rules for /sys/class/power_supply/BAT0/charge_control_end_threshold https://www.altlinux.org/Udev
+11) "S-<bracketleft>" - prev_window + bring_to_front alt_tab need to change
+12) telegram windows + floating rules
 
 
 /etc/hostname - our hostname
