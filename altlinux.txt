@@ -130,7 +130,7 @@ https://www.altlinux.org/Control
 https://www.altlinux.org/Udev
 
 apt-get install gcc zsh seatd libwlroots12 xorg-xwayland
-apt-get install mesa-info
+apt-get install mesa-info libva-intel-media-driver
 apt-get install git wget curl openssh-common qtile kitty
 apt-get install zip unzip flatpak wl-clipboard
 apt-get install sing-box
