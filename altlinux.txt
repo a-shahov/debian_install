@@ -159,6 +159,9 @@ busctl call org.freedesktop.login1 /org/freedesktop/login1/session/$SESSION_ID o
 /sys/class/backlight/intel_backlight/brightness
 https://www.altlinux.org/Backlight#%D0%A3%D1%82%D0%B8%D0%BB%D0%B8%D1%82%D1%8B_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8
 
+OR
+/etc/udev/rules.d/99-qtile.rules
+
 /etc/security/limits.d/51-custom-limits.conf
 * soft nproc 2048
 * hard nproc 4096
