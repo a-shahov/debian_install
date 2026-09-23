@@ -11,7 +11,7 @@
 10) dbus notifier dunst
 11) "S-<bracketleft>" - prev_window + bring_to_front alt_tab need to change
 12) telegram windows + floating rules
-13) systemctl poweroff/suspend/hybernate
+13) systemctl poweroff/suspend/hybernate (qtile-extras)
 
 
 /etc/hostname - our hostname
