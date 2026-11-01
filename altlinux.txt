@@ -178,3 +178,5 @@ root hard nproc 32768
 flatpak remote-add flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak update
 
+# sing-box
+sing-box run -c .config/sing-box/config.json
