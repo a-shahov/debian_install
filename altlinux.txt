@@ -135,6 +135,7 @@ apt-get install mesa-info libva-intel-media-driver
 apt-get install git wget curl openssh-common qtile kitty
 apt-get install zip unzip flatpak wl-clipboard
 apt-get install sing-box
+apt-get install keyd
 apt-get install tlegram-desktop libqt6-wlshellintegration
 
 systemctl start/enable seatd
@@ -180,3 +181,14 @@ flatpak update
 
 # sing-box
 sing-box run -c .config/sing-box/config.json
+
+# keyboard layout
+/etc/keyd/default.conf
+[ids]
+*
+
+[main]
+# f13 in qtile XF86Tools
+capslock = f13
+
+systemctl enable --now keyd
